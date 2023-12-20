@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import dbConnection from "./dbConfig/index.js";
+import errorMiddleware from "./middleware/errorMiddleware.js";
 
 // security packages
 import helmet from "helmet";
@@ -26,5 +27,8 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
+
+// error middleware
+app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`Dev Server running on port ${PORT}`));

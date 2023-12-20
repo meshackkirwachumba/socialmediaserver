@@ -1,5 +1,5 @@
 import Users from "../models/userModel.js";
-import { hashString } from "../utils/index.js";
+import { compareString, createJWT, hashString } from "../utils/index.js";
 import { sendVerificationEmail } from "../utils/sendEmail.js";
 
 export const register = async (req, res, next) => {
@@ -36,4 +36,56 @@ export const register = async (req, res, next) => {
     console.log(error);
     res.status(500).json({ message: error.message });
   }
+};
+
+export const login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    // validation
+    if (!email || !password) {
+      next("Please enter all fields");
+      return;
+    }
+
+    // check if user exist
+    const user = await Users.findOne({ email }).select("+password").populate({
+      path: "friends",
+      select: "firstName lastName location profileUrl -password",
+    });
+
+    // if user does not exist
+    if (!user) {
+      next("invalid credentials");
+      return;
+    }
+
+    // check if user has verified his or her account
+    if (!user?.verified) {
+      next("Please verify your account");
+      return;
+    }
+
+    // check if password is correct
+    const isMatch = await compareString(password, user?.password);
+
+    if (!isMatch) {
+      next("invalid credentials");
+      return;
+    }
+
+    // if password is correct
+    user.password = undefined;
+
+    //create token
+    const token = createJWT(user?._id);
+
+    // send token and user as res
+    res.status(201).json({
+      success: true,
+      message: "Login successful",
+      user,
+      token,
+    });
+  } catch (error) {}
 };
