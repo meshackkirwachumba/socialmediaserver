@@ -1,6 +1,6 @@
 import Verification from "../models/emailVerificationModel.js";
 import Users from "../models/userModel.js";
-import { compareString } from "../utils.js";
+import { compareString } from "../utils/index.js";
 
 export const verifyEmail = async (req, res) => {
   const { userId, token } = req.params;
@@ -65,7 +65,7 @@ export const verifyEmail = async (req, res) => {
           })
           .catch((error) => {
             console.log(error);
-            res.redirect(`/users/verified?status=error&message=`);
+            res.redirect(`/users/verified?message=`);
           });
       }
     } else {

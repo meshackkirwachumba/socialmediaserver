@@ -40,8 +40,8 @@ export const sendVerificationEmail = async (user, res) => {
               <p>This link <b>expires in 1 hour</b></p>
               <br />
               <a href=${link}
-                 style="color:#fff; padding:14px; text-decoration:none; backgound-color:#000000;">
-                 Email Address
+                 style="color:#fff; padding:14px; text-decoration:none; background-color:#000;">
+                Verify Here
               </a>        
             </p>
            <div style="margin-top:20px">
@@ -58,7 +58,7 @@ export const sendVerificationEmail = async (user, res) => {
       userId: _id,
       token: hashedToken,
       createdAt: Date.now(),
-      expiresAt: Date.now() + 3600000,
+      expiresAt: Date.now() + 60 * 60 * 1000,
     });
 
     if (newVerifiedEmail) {

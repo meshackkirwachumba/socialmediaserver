@@ -8,6 +8,6 @@ const __dirname = path.resolve(path.dirname(""));
 usersRouter.get("/verify/:userId/:token", verifyEmail);
 
 usersRouter.get("/verified", (req, res) => {
-  res.sendFile(path.join(__dirname, "./views/verifiedpage.html"));
+  res.sendFile(path.join(__dirname, "./views/build", "index.html"));
 });
 export default usersRouter;
