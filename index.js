@@ -8,6 +8,7 @@ import errorMiddleware from "./middleware/errorMiddleware.js";
 
 // security packages
 import helmet from "helmet";
+import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -27,6 +28,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
+
+// routes
+app.use("/auth", authRouter);
 
 // error middleware
 app.use(errorMiddleware);
