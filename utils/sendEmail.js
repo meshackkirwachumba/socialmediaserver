@@ -40,7 +40,7 @@ export const sendVerificationEmail = async (user, res) => {
               <p>This link <b>expires in 1 hour</b></p>
               <br />
               <a href=${link}
-                 style="color:#fff; padding:14px; text-decoration:none; backgound-color:#000;">
+                 style="color:#fff; padding:14px; text-decoration:none; backgound-color:#000000;">
                  Email Address
               </a>        
             </p>

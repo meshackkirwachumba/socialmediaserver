@@ -30,7 +30,7 @@ export const register = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    // if user is created send verification email
+    // if user is created send verification email to user email
     sendVerificationEmail(user, res);
   } catch (error) {
     console.log(error);
@@ -62,7 +62,7 @@ export const login = async (req, res, next) => {
 
     // check if user has verified his or her account
     if (!user?.verified) {
-      next("Please verify your account");
+      next("Please check your email to verify your account");
       return;
     }
 

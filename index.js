@@ -9,6 +9,7 @@ import errorMiddleware from "./middleware/errorMiddleware.js";
 // security packages
 import helmet from "helmet";
 import authRouter from "./routes/authRoutes.js";
+import usersRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 
 // error middleware
 app.use(errorMiddleware);
