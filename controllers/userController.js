@@ -217,19 +217,9 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { firstName, lastName, location, profileUrl, profession, contact } =
-      req.body;
+    const { firstName, lastName, location, profileUrl, profession } = req.body;
 
-    if (
-      !(
-        firstName ||
-        lastName ||
-        location ||
-        profileUrl ||
-        profession ||
-        contact
-      )
-    ) {
+    if (!(firstName || lastName || location || profileUrl || profession)) {
       next("All fields are required");
       return;
     }
@@ -265,46 +255,46 @@ export const updateUser = async (req, res) => {
 };
 
 // send friend request
-export const friendRequest = async (req, res) => {
+export const friendRequest = async (req, res, next) => {
   try {
     const { userId } = req.body.user;
     const { requestTo } = req.body;
+
+    // check if friend request already sent
+    const friendRequestExist = await FriendRequest.findOne({
+      requestFrom: userId,
+      requestTo,
+    });
+
+    if (friendRequestExist) {
+      next("Friend request already sent");
+      return;
+    }
+
+    // check if the person has already sent a friend request to me ie userId
+    const accountEXist = await FriendRequest.findOne({
+      requestFrom: requestTo,
+      requestTo: userId,
+    });
+
+    if (accountEXist) {
+      next("Friend request already sent");
+      return;
+    }
+
+    // if none of the above has sent any friend request
+    const newFriendRequest = await FriendRequest.create({
+      requestTo: requestTo,
+      requestFrom: userId,
+    });
+
+    res.status(200).json({ success: true, message: "Friend request sent" });
   } catch (error) {
     console.log(error);
     res
       .status(500)
       .json({ message: "auth error", success: false, error: error.message });
   }
-
-  // check if friend request already sent
-  const friendRequestExist = await FriendRequest.findOne({
-    requestFrom: userId,
-    requestTo: requestTo,
-  });
-
-  if (friendRequestExist) {
-    next("Friend request already sent");
-    return;
-  }
-
-  // check if the person has already sent a friend request to me ie userId
-  const accountEXist = await FriendRequest.findOne({
-    requestFrom: requestTo,
-    requestTo: userId,
-  });
-
-  if (accountEXist) {
-    next("Friend request already sent");
-    return;
-  }
-
-  // if none of the above has sent any friend request
-  const newFriendRequest = await FriendRequest.create({
-    requestTo: requestTo,
-    requestFrom: userId,
-  });
-
-  res.status(200).json({ success: true, message: "Friend request sent" });
 };
 
 // get friend request
@@ -322,6 +312,8 @@ export const getfriendRequest = async (req, res) => {
       })
       .limit(10)
       .sort({ _id: -1 });
+
+    res.status(200).json({ request, success: true });
   } catch (error) {
     console.log(error);
     res
@@ -357,7 +349,7 @@ export const acceptRequest = async (req, res) => {
 
       await user.save();
 
-      // add user id to friends array
+      // add user id to friends array of friend
       const friend = await Users.findById(newRes?.requestFrom);
 
       friend.friends.push(newRes?.requestTo);

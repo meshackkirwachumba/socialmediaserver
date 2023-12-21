@@ -41,7 +41,7 @@ usersRouter.get("/resetpassword", (req, res) => {
 
 // user Routes
 usersRouter.post("/get-user/:id?", userAuth, getUser);
-usersRouter.post("/update-user", userAuth, updateUser);
+usersRouter.put("/update-user", userAuth, updateUser);
 
 // friend request
 usersRouter.post("/friend-request", userAuth, friendRequest);
