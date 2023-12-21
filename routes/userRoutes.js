@@ -14,6 +14,7 @@ import {
   suggestedFriends,
 } from "../controllers/userController.js";
 import userAuth from "../middleware/authMiddleware.js";
+import { deletePost } from "../controllers/postController.js";
 
 const usersRouter = express.Router();
 const __dirname = path.resolve(path.dirname(""));

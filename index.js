@@ -11,6 +11,7 @@ import path from "path";
 import helmet from "helmet";
 import authRouter from "./routes/authRoutes.js";
 import usersRouter from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 
 const __dirname = path.resolve(path.dirname(""));
 
@@ -38,6 +39,7 @@ app.use(morgan("dev"));
 // routes
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
+app.use("/posts", postRoutes);
 
 // error middleware
 app.use(errorMiddleware);
