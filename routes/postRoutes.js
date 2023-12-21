@@ -43,6 +43,6 @@ postRoutes.post("/comment/:id", userAuth, commentPost);
 postRoutes.post("/reply-comment/:id", userAuth, replyPostComment);
 
 // delete post
-postRouter.delete("/:id", userAuth, deletePost);
+postRoutes.delete("/:id", userAuth, deletePost);
 
 export default postRoutes;
